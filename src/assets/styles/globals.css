@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.justify-flex-start {
+  justify-content: flex-start;
+}
+
+.justify-flex-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-flex-start {
+  align-items: flex-start;
+}
+
+.align-flex-end {
+  align-items: flex-end;
+}
+
+.g-5 {
+  gap: 20px;
+}
+
+.g-3 {
+  gap: 8px;
+}
+
+.g-10 {
+  gap: 150px;
+}
+
+/* width & height */
+
+.h-100 {
+  height: 100vh;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* background */
+
+.Login-container {
+  background-image: url(../../../public/Login/login-background.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
