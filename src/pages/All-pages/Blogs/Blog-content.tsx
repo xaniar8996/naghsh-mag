@@ -8,6 +8,7 @@ import {
   CardActions,
   CardHeader,
   CardContent,
+  CardMedia,
   Button,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -28,7 +29,7 @@ export default function BlogContent() {
   const router = useRouter();
   const { id } = router.query;
   const [blog, setBlog] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [saveBlog, setSaveBlog] = useState<any>([]);
 
   useEffect(() => {
@@ -50,9 +51,14 @@ export default function BlogContent() {
     axios
       .get("https://67b08ce43fc4eef538e7b8cb.mockapi.io/Nagh_mag_Blog-post")
       .then((res) => {
-        const CurrentBlog = res.data.filter((item: any) => item.id !== id);
-        const FilterBlogs = CurrentBlog.slice(0, 3);
-        setSaveBlog(FilterBlogs);
+        // فیلتر کردن بلاگ فعلی و مرتب سازی بر اساس id به صورت نزولی
+        const filteredBlogs = res.data
+          .filter((item: any) => item.id !== id)
+          .sort((a: any, b: any) => parseInt(b.id) - parseInt(a.id)); // مرتب سازی نزولی
+
+        // گرفتن 3 مورد آخر
+        const latestBlogs = filteredBlogs.slice(0, 3);
+        setSaveBlog(latestBlogs);
         setLoading(false);
       })
       .catch((error) => {
@@ -70,7 +76,7 @@ export default function BlogContent() {
           height: "100vh",
         }}
       >
-        <CircularProgress size={80} />
+        <CircularProgress sx={{ color: "black" }} />
       </Box>
     );
   }
@@ -85,7 +91,7 @@ export default function BlogContent() {
       sx={{
         p: 5,
         flexDirection: { xs: "column", sm: "row" },
-        mt:120
+        mt: saveBlog.length === 3 ? 125 : saveBlog.length < 3 ? 105 : 0,
       }}
     >
       <Box
@@ -121,7 +127,8 @@ export default function BlogContent() {
             <Typography
               variant="h4"
               sx={{
-                background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                background:
+                  "linear-gradient(45deg,rgb(180, 117, 249) 30%,rgb(103, 123, 250) 90%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontWeight: 700,
@@ -131,24 +138,44 @@ export default function BlogContent() {
             >
               {blog.Title}
             </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                color: "gray",
-              }}
-            >
-              {blog.Username}
-            </Typography>
+            <Box className="flex row justify-flex-start align-flex-start gap-5">
+              <Typography
+                variant="h6"
+                sx={{
+                  background:
+                    "linear-gradient(45deg,rgb(205, 172, 88) 30%,rgb(64, 138, 145) 90%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontWeight: 700,
+                  textAlign: "center",
+                }}
+              >
+                {blog.createAt}
+              </Typography>
+              <Typography variant="h6">
+                <b style={{ color: "gray" }}>نویسنده : </b> {blog.Username}
+              </Typography>
+              <Typography variant="h6">
+                <b
+                  style={{
+                    color: "gray",
+                  }}
+                >
+                  موضوع :{" "}
+                </b>{" "}
+                {blog.tag}
+              </Typography>
+            </Box>
           </Box>
           <Typography
-            variant="body1"
+            variant="h6"
             sx={{
               whiteSpace: "pre-line",
               lineHeight: "28px", // مقدار کمتر برای جلوگیری از افزایش ارتفاع بیش از حد
-              mشطHeight: "200px", // مقدار حداقلی برای نگه‌داشتن ارتفاع ثابت
+              minHeight: "200px", // مقدار حداقلی برای نگه‌داشتن ارتفاع ثابت
               width: { xs: "100%", sm: "100%" },
               overflowY: "auto", // اضافه شده برای اسکرول در صورت نیاز
-              maxHeight: "400px", // محدودیت ارتفاع برای اسکرول
+              maxHeight: "550px", // محدودیت ارتفاع برای اسکرول
             }}
           >
             {blog.Description}
@@ -180,23 +207,26 @@ export default function BlogContent() {
               boxShadow: "0px 8px 20px rgb(0 , 0, 0, 0.1)",
             }}
           >
+            <CardMedia>
+              {blog.Image1 && (
+                <Image
+                  className=" object-cover group-hover:scale-95 transition-transform duration-300 "
+                  src={blog.Image1 || ""}
+                  alt="image"
+                  width={350}
+                  height={400}
+                  style={{
+                    boxShadow: "0px 8px 20px rgb(0 , 0, 0, 0.1)",
+                    height: "200px",
+                    cursor: "pointer",
+                  }}
+                />
+              )}
+            </CardMedia>
             <CardContent
               className="flex column justify-flex-start align-flex-start g-5"
               sx={{ p: 2 }}
             >
-              <Image
-                className=" object-cover group-hover:scale-95 transition-transform duration-300 rounded-md"
-                src={blog.Image1 || ""}
-                alt="image"
-                width={300}
-                height={400}
-                style={{
-                  borderRadius: "16px",
-                  boxShadow: "0px 8px 20px rgb(0 , 0, 0, 0.1)",
-                  height: "200px",
-                  cursor: "pointer",
-                }}
-              />
               <Typography variant="h5">{blog.Title}</Typography>
               <Typography variant="body1" sx={{ color: "gray" }}>
                 {blog.Description.length > 20

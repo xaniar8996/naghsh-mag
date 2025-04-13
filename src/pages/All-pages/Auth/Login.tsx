@@ -51,19 +51,21 @@ export default function Login() {
 
   const Submit = async (data: any) => {
     const url = loginForm ? LoginURL : RegisterURL;
-  
+
     // اگر فرم لاگین است، ایمیل را از داده‌ها حذف کن
     if (loginForm) {
       delete data.email;
     }
-  
+
     const FetchUsers = axios.get(LoginURL);
     const Users = (await FetchUsers).data;
-  
+
     const isUserExist = Users.find((check: any) => {
-      return check.username === data.username && check.password === data.password;
+      return (
+        check.username === data.username && check.password === data.password
+      );
     });
-  
+
     if (loginForm) {
       if (!isUserExist) {
         setOpen(true);
@@ -72,29 +74,33 @@ export default function Login() {
         return;
       }
     }
-  
+
     try {
       const res = await axios.post(url, data);
-  
+
       if (loginForm) {
         Cookies.set("User-Data", uuid(), { expires: 7 });
       } else {
         Cookies.set("New-User", uuid(), { expires: 7 });
-  
+
         // **بعد از ثبت‌نام، درخواست لاگین بفرست**
         await axios.post(LoginURL, {
           username: data.username,
           password: data.password,
         });
-  
+
         Cookies.set("User-Data", uuid(), { expires: 7 });
       }
-  
+
       setOpen(true);
-      setTextMessgae(loginForm ? "ورود با موفقیت انجام شد" : "ثبت نام و ورود با موفقیت انجام شد");
+      setTextMessgae(
+        loginForm
+          ? "ورود با موفقیت انجام شد"
+          : "ثبت نام و ورود با موفقیت انجام شد"
+      );
       setSeverity("success");
       reset();
-  
+
       setTimeout(() => {
         router.push("/All-pages/Home");
       }, 2000);
@@ -104,7 +110,10 @@ export default function Login() {
       setSeverity("error");
     }
   };
-  
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <Container
@@ -158,7 +167,7 @@ export default function Login() {
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <IconButton>
+                          <IconButton onClick={handleClickShowPassword}>
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>

@@ -1,5 +1,6 @@
 import { Typography, Box, Button } from "@mui/material";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -39,6 +40,7 @@ export default function Home() {
               borderRadius: "10px",
             }}
           >
+            <Link href="/All-pages/Blogs/Add-blog">
             <Button
               variant="contained"
               color="primary"
@@ -51,6 +53,7 @@ export default function Home() {
             >
               ایده‌هات رو به اشتراک بگذار!
             </Button>
+            </Link>
           </motion.div>
         </Box>
 

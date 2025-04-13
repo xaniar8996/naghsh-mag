@@ -122,16 +122,26 @@ export const Layout = ({ children }: any) => {
           />
           {Btns.map((btn, index) => (
             <Link href={btn.link} key={index}>
-              <Button
-                variant="text"
-                sx={{
-                  color: Pathname === btn.link ? "white" : "black",
-                  borderRadius: "7px",
-                  bgcolor: Pathname === btn.link ? "black" : "white",
-                }}
+              <motion.div
+            whileHover={{
+              transform: "translateY(-5px)",
+              boxShadow: "3px 3px 0px yellow",
+            }}
+            style={{
+              borderRadius:"7px"
+            }}
               >
-                {btn.name}
-              </Button>
+                <Button
+                  variant="text"
+                  sx={{
+                    color: Pathname === btn.link ? "white" : "black",
+                    borderRadius: "7px",
+                    bgcolor: Pathname === btn.link ? "black" : "white",
+                  }}
+                >
+                  {btn.name}
+                </Button>
+              </motion.div>
             </Link>
           ))}
         </Toolbar>
@@ -188,7 +198,6 @@ export const Layout = ({ children }: any) => {
             {Social_media.map((item, index) => (
               <motion.div
                 whileHover={{
-                  transform: "scale(1.09)",
                   boxShadow: "3px 3px 0px yellow",
                 }}
                 transition={{

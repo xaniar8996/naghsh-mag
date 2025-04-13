@@ -16,6 +16,7 @@
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.8.4",
     "framer-motion": "^12.6.2",
+    "jalali-moment": "^3.3.11",
     "js-cookie": "^3.0.5",
     "next": "15.2.4",
     "react": "^19.0.0",

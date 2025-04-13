@@ -11,15 +11,22 @@ import {
   IconButton,
   Tooltip,
   CircularProgress,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
 } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import moment from "jalali-moment";
 // images
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Delete, Edit, Launch } from "@mui/icons-material";
+// components
+import Delete_Blog from "./Delete-blogs/Delete-Blog-component";
 
 interface BlogProps {
   id: string;
@@ -46,6 +53,9 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [textMessgae, setTextMessgae] = useState("");
   const [loginCookie, setLoginCookie] = useState<string | undefined>(undefined);
+  const [tag, setTag] = useState<string>("");
+  const [openDeleteBlog, setOpenDeleteBlog] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState({});
   const [registerCookie, setRegisterCookie] = useState<string | undefined>(
     undefined
   );
@@ -53,10 +63,9 @@ export default function Home() {
     "success" | "info" | "warning" | "error" | undefined
   >(undefined);
 
-  //   Fetching blogs
+  // farsi time now
 
-  const RegisterURL = "http://localhost:3001/Register";
-  const LoginURL = "http://localhost:3001/Login";
+  const nowShamsi = moment().locale("fa").format("YYYY/MM/DD");
 
   useEffect(() => {
     const RegisterURL = "http://localhost:3001/Register";
@@ -166,6 +175,7 @@ export default function Home() {
       Description: "",
       tag: "",
       Image1: null,
+      createAt: nowShamsi,
     },
   });
 
@@ -180,13 +190,15 @@ export default function Home() {
       data.Username = lastUser.username; // اضافه به داده‌های ارسالی
     }
 
+    data.tag = tag;
+
     axios
       .post(
         "https://67b08ce43fc4eef538e7b8cb.mockapi.io/Nagh_mag_Blog-post",
         data
       )
       .then((res) => {
-        console.log(res.data);
+        console.log("بلاگ : ", res.data);
         reset();
         setPreviewImage1(null);
         setOpen(true);
@@ -210,12 +222,85 @@ export default function Home() {
     router.push(`/All-pages/Blogs/Blog-content?id=${blog.id}`);
   };
 
+  // one radio
+
+  const handleTagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTag(event.target.value);
+  };
+
+  // delete blog
+
+  const handleOpenDelete = (blog: any) => {
+    setOpenDeleteBlog(true);
+    setSelectedBlog(blog);
+  };
+
+  if (loading) {
+    return (
+      <Box className="h-100 flex column justify-center align-center">
+        <CircularProgress sx={{ color: "black" }} />
+      </Box>
+    );
+  }
+
+  // categorys
+
+  const All_Categorys = [
+    {
+      value: "فناوری و کامپیوتر",
+    },
+    {
+      value: "تحصیلی و آموزش",
+    },
+    {
+      value: "سلامت و پزشکی",
+    },
+    {
+      value: "کسب‌وکار و کارآفرینی",
+    },
+    {
+      value: "سبک زندگی و سرگرمی",
+    },
+    {
+      value: "موفقیت و توسعه فردی",
+    },
+    {
+      value: "هنر و فرهنگی",
+    },
+    {
+      value: "ورزشی",
+    },
+    {
+      value: "غذا و آشپزی",
+    },
+    {
+      value: "موسیقی و پادکست",
+    },
+    {
+      value: "روانشناسی و خودشناسی",
+    },
+    {
+      value: "اقتصاد و سیاست",
+    },
+    {
+      value: "سفر و عکاسی ",
+    },
+    {
+      value: "تاریخ و فلسفه ",
+    },
+    {
+      value: "رابطه و خانواده ",
+    },
+    {
+      value: "فیلم و سینما ",
+    },
+  ];
+
   return (
     <Container
       maxWidth="xl"
       className="flex column justify-center align-center w-100"
-      sx={{ mt: 15, mb: 5 , maxWidth:"600px" }}
-      
+      sx={{ mt: 55, mb: 5, maxWidth: "600px" }}
     >
       {loginCookie || registerCookie ? (
         <Box
@@ -274,7 +359,7 @@ export default function Home() {
               required
               {...register("Description")}
               multiline
-              rows={8}
+              rows={15}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
@@ -283,23 +368,33 @@ export default function Home() {
                 width: "100%",
               }}
             />
+
             {/* tags */}
-            <TextField
-              label="تگ های بلاگ"
-              variant="outlined"
-              required
-              {...register("tag")}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
-                width: "100%",
-              }}
-            />
+
+            <FormControl component="fieldset">
+              <RadioGroup
+                name="tag"
+                value={tag}
+                onChange={handleTagChange}
+                sx={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)" }}
+              >
+                {All_Categorys.map((item, index) => (
+                  <FormControlLabel
+                    required
+                    key={index}
+                    value={item.value}
+                    control={<Radio />}
+                    label={item.value}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+
             {/* image */}
             <input
               type="file"
               id="Image_Selcetor_1"
+              required
               accept="image/*"
               style={{ display: "none" }}
               {...register("Image1", {
@@ -318,7 +413,7 @@ export default function Home() {
                 }}
                 onClick={() => Click_ID_1()}
               >
-                آپلود تصویر 1
+                آپلود تصویر
               </Button>
               <Image
                 alt="first-preview"
@@ -330,6 +425,7 @@ export default function Home() {
                   boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
                   width: "120px",
                   height: "70px",
+                  objectFit: "cover",
                 }}
               />
             </Box>
@@ -381,8 +477,8 @@ export default function Home() {
                 </Typography>
               </motion.div>
             ) : (
-              <Typography
-                variant="h5"
+              <Box
+                className="flex row justify-center align-center gap-45"
                 sx={{
                   background:
                     "linear-gradient(45deg,rgb(236, 199, 107) 30%,rgb(234, 168, 246) 90%)",
@@ -396,8 +492,11 @@ export default function Home() {
                   color: "black",
                 }}
               >
-                بلاگ های ثبت شده توسط شما
-              </Typography>
+                <Typography variant="h5">بلاگ های ثبت شده توسط شما</Typography>
+                <Typography variant="h5">
+                  تعداد بلاگ ها شما : {FilterBlogs.length}
+                </Typography>
+              </Box>
             )}
 
             <Stack
@@ -437,7 +536,13 @@ export default function Home() {
                         }}
                       />
                       <Typography variant="h6">
-                        {blog.Title || ""} - {blog.Username || ""}
+                        {blog.Title.length > 25
+                          ? blog.Title.slice(0, 25)
+                              .trim()
+                              .replace(/[‌،؛:؟!.\-–—\s]+$/, "") + "..."
+                          : blog.Title}
+                        {" - "}
+                        {blog.Username || ""}
                       </Typography>
                     </Box>
 
@@ -450,7 +555,7 @@ export default function Home() {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="حذف بلاگ">
-                        <IconButton>
+                        <IconButton onClick={() => handleOpenDelete(blog)}>
                           <Delete color="error" />
                         </IconButton>
                       </Tooltip>
@@ -476,6 +581,14 @@ export default function Home() {
           {textMessgae}
         </Alert>
       </Snackbar>
+      {/* delete blog */}
+      <Delete_Blog
+        openDeleteBlog={openDeleteBlog}
+        setOpenDeleteBlog={setOpenDeleteBlog}
+        selectedBlog={selectedBlog}
+        refresh={refresh}
+        setRefresh={setRefresh}
+      />
     </Container>
   );
 }
