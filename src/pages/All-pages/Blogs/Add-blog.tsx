@@ -215,7 +215,6 @@ export default function Home() {
       });
   };
 
-
   // blog content
   const router = useRouter();
 
