@@ -215,7 +215,6 @@ export default function Home() {
       });
   };
 
-  // فرستادن اخرین کاربر به بلاگ
 
   // blog content
   const router = useRouter();
