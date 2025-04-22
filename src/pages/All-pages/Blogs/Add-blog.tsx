@@ -27,6 +27,8 @@ import { useForm } from "react-hook-form";
 import { Delete, Edit, Launch } from "@mui/icons-material";
 // components
 import Delete_Blog from "./Delete-blogs/Delete-Blog-component";
+// categorys
+import { All_Categorys } from "../Data/Filtered_Categorys";
 
 interface BlogProps {
   id: string;
@@ -68,8 +70,8 @@ export default function Home() {
   const nowShamsi = moment().locale("fa").format("YYYY/MM/DD");
 
   useEffect(() => {
-    const RegisterURL = "http://localhost:3001/Register";
-    const LoginURL = "http://localhost:3001/Login";
+    const RegisterURL = "http://192.168.1.103:3001/Register";
+    const LoginURL = "http://192.168.1.103:3001/Login";
 
     const currentLoginCookie = Cookies.get("User-Data");
     const currentRegisterCookie = Cookies.get("New-User");
@@ -243,64 +245,11 @@ export default function Home() {
     );
   }
 
-  // categorys
-
-  const All_Categorys = [
-    {
-      value: "فناوری و کامپیوتر",
-    },
-    {
-      value: "تحصیلی و آموزش",
-    },
-    {
-      value: "سلامت و پزشکی",
-    },
-    {
-      value: "کسب‌وکار و کارآفرینی",
-    },
-    {
-      value: "سبک زندگی و سرگرمی",
-    },
-    {
-      value: "موفقیت و توسعه فردی",
-    },
-    {
-      value: "هنر و فرهنگی",
-    },
-    {
-      value: "ورزشی",
-    },
-    {
-      value: "غذا و آشپزی",
-    },
-    {
-      value: "موسیقی و پادکست",
-    },
-    {
-      value: "روانشناسی و خودشناسی",
-    },
-    {
-      value: "اقتصاد و سیاست",
-    },
-    {
-      value: "سفر و عکاسی ",
-    },
-    {
-      value: "تاریخ و فلسفه ",
-    },
-    {
-      value: "رابطه و خانواده ",
-    },
-    {
-      value: "فیلم و سینما ",
-    },
-  ];
-
   return (
     <Container
       maxWidth="xl"
       className="flex column justify-center align-center w-100"
-      sx={{ mt: 55, mb: 5, maxWidth: "600px" }}
+      sx={{ mt: { xs: 105, sm: 60 }, mb: 5, maxWidth: "600px" }}
     >
       {loginCookie || registerCookie ? (
         <Box
@@ -338,7 +287,7 @@ export default function Home() {
           </motion.div>
           <form
             onSubmit={handleSubmit(Submit_Form)}
-            className="flex column justify-flex-start align-flex-start g-5"
+            className="flex column justify-center align-center g-5"
             style={{ width: "100%" }}
           >
             <TextField
@@ -350,7 +299,7 @@ export default function Home() {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
                 },
-                width: "100%",
+                width: { xs: "90%", sm: "100%" },
               }}
             />
             <TextField
@@ -365,7 +314,7 @@ export default function Home() {
                   borderRadius: "12px",
                   whiteSpace: "pre-wrap",
                 },
-                width: "100%",
+                width: { xs: "90%", sm: "100%" },
               }}
             />
 
@@ -376,7 +325,16 @@ export default function Home() {
                 name="tag"
                 value={tag}
                 onChange={handleTagChange}
-                sx={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)" }}
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "repeat(2,1fr)",
+                    sm: "repeat(4,1fr)",
+                  },
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 2,
+                }}
               >
                 {All_Categorys.map((item, index) => (
                   <FormControlLabel
@@ -438,7 +396,9 @@ export default function Home() {
                 borderRadius: "10px",
                 fontSize: "15px",
                 p: 1.5,
-                width: isSubmitting ? "20%" : "25%",
+                width: isSubmitting
+                  ? { xs: "10%", sm: "20%" }
+                  : { xs: "60%", sm: "25%" },
               }}
             >
               {isSubmitting ? "در حال ثبت" : "ثبت"}
@@ -478,7 +438,7 @@ export default function Home() {
               </motion.div>
             ) : (
               <Box
-                className="flex row justify-center align-center gap-45"
+                className="flex justify-center align-center"
                 sx={{
                   background:
                     "linear-gradient(45deg,rgb(236, 199, 107) 30%,rgb(234, 168, 246) 90%)",
@@ -490,6 +450,8 @@ export default function Home() {
                   p: 1.5,
                   width: "100%",
                   color: "black",
+                  gap: { xs: 5, sm: 40 },
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
                 <Typography variant="h5">بلاگ های ثبت شده توسط شما</Typography>
@@ -510,15 +472,17 @@ export default function Home() {
                 p: 3,
               }}
             >
-              <Box className="flex column justify-flex-start align-center g-3 w-100">
+              <Box className="flex column justify-flex-start align-center w-100">
                 {FilterBlogs.map((blog, index) => (
                   <Box
-                    className="flex row justify-flex-start align-center g-10 "
+                    className="flex justify-flex-start align-center "
                     sx={{
                       boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
                       borderRadius: "10px",
                       width: "100%",
                       p: 2,
+                      flexDirection: { xs: "column", sm: "row" },
+                      gap: { xs: 0, sm: "auto" },
                     }}
                     key={index}
                   >
@@ -548,7 +512,10 @@ export default function Home() {
 
                     {/* btns */}
 
-                    <Box className="flex column justify-flex-start align-center">
+                    <Box
+                      className="flex justify-flex-start align-center"
+                      sx={{ flexDirection: { xs: "row", sm: "column" } }}
+                    >
                       <Tooltip title="صفحه اصلی بلاگ">
                         <IconButton onClick={() => Blogcontetnt(blog)}>
                           <Launch color="info" />

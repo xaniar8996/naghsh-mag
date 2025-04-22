@@ -22,6 +22,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 // image
 import Image from "next/image";
 import { AccountCircle } from "@mui/icons-material";
+import { Filter_Categorys } from "./Data/Filtered_Categorys";
 
 interface BlogProps {
   id: string;
@@ -108,57 +109,6 @@ export default function Home() {
 
   // filter button
 
-  const Filter_Categorys = [
-    {
-      value: "فناوری و کامپیوتر",
-    },
-    {
-      value: "تحصیلی و آموزش",
-    },
-    {
-      value: "سلامت و پزشکی",
-    },
-    {
-      value: "کسب‌وکار و کارآفرینی",
-    },
-    {
-      value: "سبک زندگی و سرگرمی",
-    },
-    {
-      value: "موفقیت و توسعه فردی",
-    },
-    {
-      value: "هنر و فرهنگی",
-    },
-    {
-      value: "ورزشی",
-    },
-    {
-      value: "غذا و آشپزی",
-    },
-    {
-      value: "موسیقی و پادکست",
-    },
-    {
-      value: "روانشناسی و خودشناسی",
-    },
-    {
-      value: "اقتصاد و سیاست",
-    },
-    {
-      value: "سفر و عکاسی ",
-    },
-    {
-      value: "تاریخ و فلسفه ",
-    },
-    {
-      value: "رابطه و خانواده ",
-    },
-    {
-      value: "فیلم و سینما ",
-    },
-  ];
-
   // filter
 
   const handleFilter = (category: any) => {
@@ -173,16 +123,18 @@ export default function Home() {
 
   return (
     <Box
-      sx={{ mb: 10, mt: 145 }}
+      sx={{ mb: 10, mt: { xs: 510, sm: 145 } }}
       className="flex column justify-flex-start align-center g-5"
     >
       <Box
-        className="flex row justify-center align-center gap-220"
+        className="flex justify-center align-flex-end"
         sx={{
           p: 2,
           mb: 5,
           background: "none",
           boxShadow: "none",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 3, sm: 110 },
         }}
       >
         <Typography
@@ -196,12 +148,12 @@ export default function Home() {
             boxShadow: "0px 8px 20px rgb(0,0,0,0.2)",
             borderRadius: "12px",
             p: 1.5,
-            width: "400px",
+            width: { xs: "350px", sm: "400px" },
             color: "white",
             height: "100%",
           }}
         >
-          تمامی بلاگ ها
+          همه بلاگ ها
         </Typography>
         <Box
           className="flex row-reverse justify-center align-center gap-2"
@@ -220,12 +172,12 @@ export default function Home() {
                 position: "absolute",
                 background:
                   "linear-gradient(45deg,rgb(144, 228, 241) 30%,rgb(245, 132, 213) 90%)",
-                mt: 45,
+                mt: { xs: 50, sm: 45 },
                 borderRadius: "16px",
                 p: 1,
-                width: "500px",
+                width: { xs: "400px", sm: "500px" },
                 gridTemplateColumns: "repeat(4,1fr)",
-                mr: 35,
+                mr: { xs: 36.5, sm: 35 },
               }}
             >
               {Filter_Categorys.map((category, index) => (
@@ -296,7 +248,7 @@ export default function Home() {
 
       <Box
         sx={{
-          height: "135vh",
+          height: { xs: "470vh", sm: "135vh" },
           mb: 25,
         }}
       >
@@ -338,9 +290,7 @@ export default function Home() {
                 >
                   <Box className="flex row justify-flex-start align-center gap-2">
                     <AccountCircle sx={{ fontSize: 35 }} />
-                    <Typography variant="body1">
-                      {blog.Username}
-                    </Typography>
+                    <Typography variant="body1">{blog.Username}</Typography>
                   </Box>
                   <Typography
                     variant="body2"

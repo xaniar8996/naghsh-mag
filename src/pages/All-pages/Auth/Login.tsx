@@ -46,8 +46,8 @@ export default function Login() {
   } = useForm();
 
   // baseURL
-  const RegisterURL = "http://localhost:3001/Register";
-  const LoginURL = "http://localhost:3001/Login";
+  const RegisterURL = "http://192.168.1.103:3001/Register";
+  const LoginURL = "http://192.168.1.103:3001/Login";
 
   const Submit = async (data: any) => {
     const url = loginForm ? LoginURL : RegisterURL;

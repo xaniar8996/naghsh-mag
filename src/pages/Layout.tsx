@@ -8,6 +8,8 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import axios from "axios";
 // icons
 import PersonIcon from "@mui/icons-material/Person";
@@ -17,7 +19,9 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Instagram, Telegram, X } from "@mui/icons-material";
+import { Instagram, Menu, Telegram, X } from "@mui/icons-material";
+// mobile menu
+import Mobile_Menu from "./All-pages/Mobile-Menu";
 
 interface User {
   id: string;
@@ -29,6 +33,7 @@ interface User {
 export const Layout = ({ children }: any) => {
   const [user, setUser] = useState<User[]>([]);
   const [loginCookie, setLoginCookie] = useState<string | undefined>(undefined);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [registerCookie, setRegisterCookie] = useState<string | undefined>(
     undefined
   );
@@ -74,8 +79,8 @@ export const Layout = ({ children }: any) => {
 
   // fetching users
   useEffect(() => {
-    const RegisterURL = "http://localhost:3001/Register";
-    const LoginURL = "http://localhost:3001/Login";
+    const RegisterURL = "http://192.168.1.103:3001/Register";
+    const LoginURL = "http://192.168.1.103:3001/Login";
 
     const currentLoginCookie = Cookies.get("User-Data");
     const currentRegisterCookie = Cookies.get("New-User");
@@ -102,15 +107,22 @@ export const Layout = ({ children }: any) => {
   return (
     <Box className="flex column justify-center align-center h-100 w-100">
       <AppBar
-        className="flex row justify-center align-center gap-150"
+        className="flex row justify-center align-center "
         sx={{
           bgcolor: "white",
+          gap: { xs: 2, sm: 80 },
         }}
       >
         <Toolbar
           className="flex row justify-center align-center g-5"
           sx={{ p: 1.5 }}
         >
+          <IconButton
+            onClick={() => setOpenDrawer(true)}
+            sx={{ display: { xs: "block", sm: "none" } }}
+          >
+            <MenuIcon sx={{ fontSize: 35, color: "black" }} />
+          </IconButton>
           <Image
             alt="logo"
             src="/Login/logo (2).png"
@@ -123,13 +135,13 @@ export const Layout = ({ children }: any) => {
           {Btns.map((btn, index) => (
             <Link href={btn.link} key={index}>
               <motion.div
-            whileHover={{
-              transform: "translateY(-5px)",
-              boxShadow: "3px 3px 0px yellow",
-            }}
-            style={{
-              borderRadius:"7px"
-            }}
+                whileHover={{
+                  transform: "translateY(-5px)",
+                  boxShadow: "3px 3px 0px yellow",
+                }}
+                style={{
+                  borderRadius: "7px",
+                }}
               >
                 <Button
                   variant="text"
@@ -137,6 +149,7 @@ export const Layout = ({ children }: any) => {
                     color: Pathname === btn.link ? "white" : "black",
                     borderRadius: "7px",
                     bgcolor: Pathname === btn.link ? "black" : "white",
+                    display: { xs: "none", sm: "block" },
                   }}
                 >
                   {btn.name}
@@ -145,7 +158,8 @@ export const Layout = ({ children }: any) => {
             </Link>
           ))}
         </Toolbar>
-        <Toolbar className="flex row justify-center align-center">
+        <Toolbar className="flex row justify-center align-center g-3 ">
+          <AccountCircleIcon sx={{ fontSize: "40px"  , color:"black"}} />
           {loginCookie || registerCookie ? (
             <Typography variant="h6" sx={{ color: "black" }}>
               {user.at(-1)?.username}
@@ -178,7 +192,13 @@ export const Layout = ({ children }: any) => {
           textAlign: "center",
         }}
       >
-        <Box className="flex row justify-center align-center gap-150">
+        <Box
+          className="flex justify-center align-center"
+          sx={{
+            flexDirection: { xs: "column", sm: "row" },
+            gap: { xs: 5, sm: 100 },
+          }}
+        >
           <Box className="flex row justify-center align-center g-5">
             <Image
               alt="logo"
@@ -219,6 +239,7 @@ export const Layout = ({ children }: any) => {
           © 2025 تمامی حقوق محفوظ است.
         </Typography>
       </footer>
+      <Mobile_Menu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
     </Box>
   );
 };

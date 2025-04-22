@@ -91,7 +91,12 @@ export default function BlogContent() {
       sx={{
         p: 5,
         flexDirection: { xs: "column", sm: "row" },
-        mt: saveBlog.length === 3 ? 125 : saveBlog.length < 3 ? 105 : 0,
+        mt:
+          saveBlog.length === 3
+            ? { xs: 270, sm: 125 }
+            : saveBlog.length < 3
+            ? { xs: 200, sm: 105 }
+            : 0,
       }}
     >
       <Box
@@ -122,7 +127,10 @@ export default function BlogContent() {
             }}
           />
         </Box>
-        <Box className="flex column justify-flex-start align-flex-start gap-5">
+        <Box
+          className="flex column justify-flex-start align-flex-start gap-5"
+          sx={{ width: { xs: "140%", sm: "auto" } }}
+        >
           <Box className="flex column justify-flex-start align-flex-start gap-1">
             <Typography
               variant="h4"
@@ -201,7 +209,7 @@ export default function BlogContent() {
           <Card
             key={index}
             sx={{
-              width: { xs: "300px", sm: "320px" },
+              width: { xs: "100%", sm: "320px" },
               height: { xs: "auto", sm: "auto" },
               borderRadius: "16px",
               boxShadow: "0px 8px 20px rgb(0 , 0, 0, 0.1)",
